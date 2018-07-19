@@ -1,0 +1,1 @@
+geth --networkid 4649 --nodiscover --maxpeers 0 --datadir ./data/ --mine --minerthreads 1 --rpc --rpcaddr "0.0.0.0" --rpcport 8545 --rpccorsdomain "*"  --rpcapi "admin,db,eth,debug,miner,net,shh,txpool,personal,web3" 
