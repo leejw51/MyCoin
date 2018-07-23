@@ -1,59 +1,59 @@
-import { MoneyFacade } from './money';
 var Web3 = require('web3');
 var web3 = new Web3(new Web3.providers.HttpProvider('http://opo:8545'));
 var Tx = require('ethereumjs-tx');
 var fs = require('fs');
 var config = require('../config.js');
 
+import { MoneyFacade } from './money';
+
+
 let abi = JSON.parse(fs.readFileSync('Purchase.abi'));
 let code = '0x' + fs.readFileSync('Purchase.bin');
+console.log('password=', config.password);
 
-let contract2 = new web3.eth.Contract(abi, null, {
-	gas: 1000000,
-	data: code
-});
-let contract3 = contract2
-	.deploy({
-		data: code,
-		arguments: ['Amazon Google']
-	})
-	.encodeABI();
-console.log('contract3=', contract3);
-var facade = new MoneyFacade({
-	To: '',
-	From: '0x187A14ad464D06b312D4C8156CfD9C007b340504',
-	Password: '1234',
-	Money: '0.01',
-	Code: contract3
-});
-facade
-	.doSendEthereum(
-		'460d5eb3598a224285bd3554579b04dd23f9c294180f450d8b3dada5c11aba35f785cb01cc925136dc6626b54e82b5836d25c5ed74ae18b2ebb4ec1a2a2b1315a22dacd10fec6b9212d1322c0007633f'
-	)
-	.then(result => {
-		console.log(result);
-	});
+
+ 
+    
+
+  
+
+var addr = config.addr;
+let contract2 = new web3.eth.Contract(abi, addr);
+//console.log('contract2=', contract2);
+let contract3 = contract2.methods 
+  .confirmPurchase()
+  .encodeABI();console.log('abi=', contract3);
+  
+  var facade = new MoneyFacade({
+    To: addr,
+    From: '0x95d6cC59EB07f93969A899a348fdabeF0cA6a357',
+    Password: config.password,
+    Money: '0.01',
+    Code: contract3
+  });
+  facade
+    .doSendEthereum(
+      'd64e5bb7f71d459a928cec55cf027420b2a18c3cc43d50fda3138324cab1ef01c12284456f2914c3cc44d9613d1bbc4616ad1c614608c39350c2581c9cf2f0bcb70a691806f66ab3079273f04559359c'
+    )
+    .then(result => {
+      console.log(result);
+    });
+
 
 function test() {
 	var coinbase: any = {};
 	web3.eth
-		.getCoinbase()
+		.getAccounts()
 		.then(result => {
-			coinbase = result;
+			coinbase = result[0];
 			web3.eth.personal.unlockAccount(coinbase, config.password);
 		})
 		.then(result => {
 			console.log('coinbase=', coinbase);
-			let contract2 = new web3.eth.Contract(abi, null, {
-				from: coinbase,
-				gas: 1000000,
-				data: code
-			});
-			contract2
-				.deploy({
-					data: code,
-					arguments: ['Amazon Google']
-				})
+			var addr = '0x94663C287193253316a15f15cBb1c8aFE77b7C06';
+			let contract2 = new web3.eth.Contract(abi, addr);
+			contract2.methods
+				.confirmPurchase()
 				.send({
 					from: coinbase,
 					gas: 1000000,

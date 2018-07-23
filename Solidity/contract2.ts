@@ -4,19 +4,48 @@ var Tx = require('ethereumjs-tx');
 var fs = require('fs');
 var config = require('../config.js');
 
+let abi = JSON.parse(fs.readFileSync('Purchase.abi'));
+let code = '0x' + fs.readFileSync('Purchase.bin');
 
-let abi = JSON.parse( fs.readFileSync('Greeter_sol_Greeter.abi') );
-let code = '0x' + fs.readFileSync('Greeter_sol_Greeter.bin');
-//console.log('abi=',abi);
-//console.log(bin);
+var coinbase: any = {};
+web3.eth.getCoinbase().then(result => {
+  coinbase = result;
+//  web3.eth.personal.unlockAccount(coinbase, config.password);
 
+  
+  
+  
+  
+  var addr = config.addr;
 
-web3.personal.unlockAccount( web3.eth.coinbase, config.password);
-var txhash = '0x4085f4216e3e0a0244322664ce27d4b3038fa61b16200b64655516c8164aa649'
-var addr = '0x274a32067c089ed757a4ff423c8998f90aef6754';
+  var greeter: any = new web3.eth.Contract(abi, addr);
 
-var greeter = web3.eth.contract(abi);
-var greeterInstance = greeter.at(addr);
-var a = greeterInstance.greet({from:web3.eth.accounts[0], gas: 3000000});
-console.log('output=',a );
+ 
+  
+  greeter.methods.greeting().call({})
+  .then(result => {
+    console.log('greeting=', result);
+  });
 
+  greeter.methods.value().call({from: coinbase, gas: 3000000})
+  .then(result => {
+    console.log('value=', result);
+  });
+
+  greeter.methods.buyer().call({from: coinbase, gas: 3000000})
+  .then(result => {
+    console.log('buyer=', result);
+  });
+
+  greeter.methods.seller().call({from: coinbase, gas: 3000000})
+  .then(result => {
+    console.log('seller=', result);
+  });
+
+  greeter.methods.state().call({})
+  .then(result => {
+    console.log('state=', result);
+  });
+
+});
+  

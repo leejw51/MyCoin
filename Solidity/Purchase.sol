@@ -4,13 +4,15 @@ contract Purchase {
     uint public value;
     address public seller;
     address public buyer;
+    string public greeting;
     enum State { Created, Locked, Inactive }
     State public state;
-
+ 
     // Ensure that `msg.value` is an even number.
     // Division will truncate if it is an odd number.
     // Check via multiplication that it wasn't an odd number.
-    function Purchase() payable {
+    function Purchase( string _greeting) payable {
+        greeting = _greeting;
         seller = msg.sender;
         value = msg.value / 2;
         require((2 * value) == msg.value);
@@ -34,6 +36,16 @@ contract Purchase {
     modifier inState(State _state) {
         require(state == _state);
         _;
+    }
+
+    function greet() constant returns (string)          
+    {
+        return greeting;
+    }
+
+    function setGreeting(string _newgreeting) 
+    {
+        greeting = _newgreeting;
     }
 
     event Aborted();
