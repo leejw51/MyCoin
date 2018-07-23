@@ -12,7 +12,7 @@ function checkAllBalances() {
 function sendMoney() {
     console.log('money');
     console.log(eth.blockNumber);
-    personal.unlockAccount(eth.accounts[1],  '', 0);
+    personal.unlockAccount(eth.accounts[1], '', 0);
     var txhash = eth.sendTransaction({
         from: eth.accounts[1],
         to: '0x187A14ad464D06b312D4C8156CfD9C007b340504',

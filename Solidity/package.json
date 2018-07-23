@@ -5,6 +5,10 @@
   "main": "contract.ts",
   "scripts": {
     "start": "./node_modules/.bin/ts-node show.ts",
+    "show": "./node_modules/.bin/ts-node show.ts",
+    "connect": "geth attach  http://localhost:8545",
+    "connect-ipc": "geth attach ipc:../data/geth.ipc",
+    "compile": "./compile.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -16,6 +20,7 @@
     "fs": "0.0.1-security",
     "promise": "^8.0.1",
     "sha256": "^0.2.0",
+    "solc": "^0.4.24",
     "ts-node": "^7.0.0",
     "web3": "^1.0.0-beta.26",
     "web3-eth": "^1.0.0-beta.34"
