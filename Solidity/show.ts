@@ -7,7 +7,6 @@ console.log(config.password);
 
 async function run() {
     var accounts = await web3.eth.getAccounts()
-    console.log(accounts)
     for (let m of accounts) {
         var amount = web3.utils.fromWei(await web3.eth.getBalance(m))
         console.log(`${m} amount=${amount} Eth`)
