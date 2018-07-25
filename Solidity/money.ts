@@ -9,8 +9,8 @@ export class MoneyFacade {
 	public private2 = 'e5d567cc46d916364fb34279cd194dfc8c9bfb8bd4fbfcfce52740f4a0b6f5ef';
 	public privateKey: any;
 	public password: any;
-  public info: any = {};
-  public code: string = '';
+	public info: any = {};
+	public code: string = '';
 	public money: string = '0';
 
 	constructor(info: any) {
@@ -19,8 +19,8 @@ export class MoneyFacade {
 		this.to = info.To;
 		this.from = info.From;
 		this.password = info.Password;
-    this.money = info.Money;
-    this.code = info.Code;
+		this.money = info.Money;
+		this.code = info.Code;
 	}
 
 	getNonce = () => {
@@ -46,7 +46,7 @@ export class MoneyFacade {
 
 			tx.sign(privateKeyBuffer);
 			const serializedTx = tx.serialize();
-			this.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'), function(err: any, hash: any) {
+			this.web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'), function (err: any, hash: any) {
 				var info: any = {};
 				info.Error = err;
 				info.Hash = hash;
@@ -58,8 +58,8 @@ export class MoneyFacade {
 	doSendEthereum = (userPrivateKey: string) => {
 		return new Promise((resolve, reject) => {
 			this.web3.eth.defaultAccount = this.from;
-      this.private2 = decrypt(userPrivateKey, this.password);
-      console.log('DecriptedKey=', this.private2);
+			this.private2 = decrypt(userPrivateKey, this.password);
+			console.log('DecriptedKey=', this.private2);
 			this.private2 = this.private2.substring(2);
 			this.privateKey = new Buffer(this.private2, 'hex');
 
@@ -70,8 +70,8 @@ export class MoneyFacade {
 						gasLimit: this.web3.utils.toHex(1000000),
 						value: this.web3.utils.toHex(this.web3.utils.toWei(this.money, 'ether')),
 						nonce: values[0], // nonce
-            gasPrice: values[1], // gas price
-            data: this.code
+						gasPrice: values[1], // gas price
+						data: this.code
 					};
 
 					return rawTx;

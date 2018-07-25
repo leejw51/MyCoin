@@ -9,5 +9,5 @@ mv Purchase_sol_Purchase.abi Purchase.abi
 mv Purchase_sol_Purchase.bin Purchase.bin
 mv News_sol_News.abi News.abi
 mv News_sol_News.bin News.bin
-mv Greeter_sol_News.abi Greeter.abi
-mv Greeter_sol_News.bin Greeter.bin
+mv Greeter_sol_Greeter.abi Greeter.abi
+mv Greeter_sol_Greeter.bin Greeter.bin
