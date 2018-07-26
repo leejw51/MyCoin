@@ -18,48 +18,39 @@ async function run() {
   console.log(`A: ${personA} ${balanceA}`)
   console.log(`B: ${personB} ${balanceB}`)
   await web3.eth.personal.unlockAccount(personA, config.password)
-
-
   var addr = personA
-  //console.log(`abi=${JSON.stringify(abi)}  addr=${addr}`)
+  console.log(`abi=${JSON.stringify(abi)}  addr=${addr}`)
   var greeter: any = new web3.eth.Contract(abi, addr);
-  console.log(await greeter.methods.getBlockNumber().call())
-  //var response = await greeter.methods.greet().call({})
-  //console.log(greeter)
+
+  web3.eth.personal.unlockAccount(personA, config.password)
+  let contract2 = new web3.eth.Contract(abi, null, {
+    from: personA,
+    data: code
+  })
+  var name = `Amazon Google ${new Date()}`
+  console.log(name)
+  let result = contract2.deploy({
+    data: code,
+    arguments: [name]
+  })
+  let contractResult = await result.send(
+    {
+      from: personA,
+      gasLimit: web3.utils.toHex(1000000), // limit of gas		
+      gasPrice: web3.utils.toHex(10000000000), // 1 gas price in wei
+      value: web3.utils.toHex(web3.utils.toWei('0.00001', 'ether'))
+    }
+  ).on('transactionHash', (txhash: any) => {
+    console.log('txhash=', txhash);
+  })
+  console.log(`Contract Create=${contractResult.options.address}`)
+  let blockNumber = await contractResult.methods.getBlockNumber().call()
+  console.log(`Block Number=${blockNumber}`)
+  var say = await contractResult.methods.greet().call({})
+  console.log(`greet=${say}`)
+
+  process.exit(0)
 
 }
 
 run()
-/*
-web3.eth.getCoinbase().then(result => {
-  coinbase = result;
-  //  web3.eth.personal.unlockAccount(coinbase, config.password);
-  var addr = config.addr;
-  var greeter: any = new web3.eth.Contract(abi, addr);
-  greeter.methods.greeting().call({})
-    .then(result => {
-      console.log('greeting=', result);
-    });
-
-  greeter.methods.value().call({ from: coinbase, gas: 3000000 })
-    .then(result => {
-      console.log('value=', result);
-    });
-
-  greeter.methods.buyer().call({ from: coinbase, gas: 3000000 })
-    .then(result => {
-      console.log('buyer=', result);
-    });
-
-  greeter.methods.seller().call({ from: coinbase, gas: 3000000 })
-    .then(result => {
-      console.log('seller=', result);
-    });
-
-  greeter.methods.state().call({})
-    .then(result => {
-      console.log('state=', result);
-    });
-
-});
-*/
