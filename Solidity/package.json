@@ -6,6 +6,7 @@
   "scripts": {
     "start": "./node_modules/.bin/ts-node show.ts",
     "hello_world": "./node_modules/.bin/ts-node hello_world.ts",
+    "send_simple": "./node_modules/.bin/ts-node send_simple.ts",
     "send_money": "./node_modules/.bin/ts-node send_money.ts",
     "show": "./node_modules/.bin/ts-node show.ts",
     "connect": "geth attach  http://localhost:8545",
