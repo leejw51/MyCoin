@@ -1,3 +1,8 @@
+/*
+ethereum tx send
+coded by jongwhan lee
+leejw51@gmail.com
+*/
 var Web3 = require('web3');
 var web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
 var Tx = require('ethereumjs-tx');
@@ -6,13 +11,13 @@ var config = require('../config.js');
 var keythereum = require("keythereum");
 async function getNonceUser(addr: string): Promise<any> {
 	var r = await web3.eth.getTransactionCount(addr)
-	var ret = web3.utils.toHex(r)
-	return ret
+	return r
 }
 
 async function getGasPriceUser(): Promise<any> {
-	var r = await web3.eth.getGasPrice()
-	var ret = web3.utils.toHex(r)
+	var ret = await web3.eth.getGasPrice()
+	var eth = web3.utils.fromWei(ret)
+	console.log(`gas price=${ret} wei   ${eth} eth`)
 	return ret
 }
 
@@ -42,7 +47,7 @@ async function sendUserRawTransaction(rawTx: any, privateKey: any) {
 			})
 		}
 	)
-};
+}
 
 async function run() {
 	var from = "0x9d16db949dffed9bf500eae1435a68a7cc9ec4df"
@@ -51,14 +56,14 @@ async function run() {
 	console.log(key)
 	var nonce = await getNonceUser(from)
 	var gas = await getGasPriceUser()
-	var amount = web3.utils.toHex(web3.utils.toWei('10.01', 'ether'))
+	var amount = web3.utils.toWei('10.01', 'ether')
 	console.log(`Nonce=${nonce}    Gas=${gas}    Amount=${amount}`)
 	const rawTx = {
 		to: to,
-		gasLimit: web3.utils.toHex(1000000),
-		value: amount,
-		nonce: nonce,
-		gasPrice: gas,
+		gasLimit: web3.utils.toHex(1000000), // limit of gas
+		value: web3.utils.toHex(amount), // amount in wei
+		nonce: web3.utils.toHex(nonce), // nonce increase by 1
+		gasPrice: web3.utils.toHex(gas), // 1 gas price in wei
 	};
 	await sendUserRawTransaction(rawTx, new Buffer(key, 'hex'))
 }
