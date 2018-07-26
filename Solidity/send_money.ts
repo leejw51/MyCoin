@@ -30,14 +30,10 @@ function getPrivateKey(address: string) {
 	return privateKey.toString('hex');
 }
 
-async function sendUserRawTransaction(rawTx: any, privateKey: any) {
-	const tx = new Tx(rawTx);
-	const privateKeyBuffer = privateKey;
-	tx.sign(privateKeyBuffer);
-	const serializedTx = tx.serialize();
+async function sendTransaction(signedTx: any) {
 	return new Promise(
 		(resolve) => {
-			web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'), function (
+			web3.eth.sendSignedTransaction('0x' + signedTx.toString('hex'), function (
 				err: any, hash: any) {
 				var info: any = {}
 				info.Error = err
@@ -46,6 +42,13 @@ async function sendUserRawTransaction(rawTx: any, privateKey: any) {
 			})
 		}
 	)
+}
+async function sendUserRawTransaction(rawTx: any, privateKey: any) {
+	const tx = new Tx(rawTx);
+	const privateKeyBuffer = privateKey;
+	tx.sign(privateKeyBuffer);
+	const signedTx = tx.serialize();
+	return sendTransaction(signedTx)
 }
 
 async function run() {
