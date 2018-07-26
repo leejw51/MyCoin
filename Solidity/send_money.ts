@@ -39,10 +39,9 @@ async function sendUserRawTransaction(rawTx: any, privateKey: any) {
 		(resolve) => {
 			web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'), function (
 				err: any, hash: any) {
-				var info: any = {};
-				info.Error = err;
-				info.Hash = hash;
-				console.log('OK=', info);
+				var info: any = {}
+				info.Error = err
+				info.Hash = hash
 				resolve(info)
 			})
 		}
@@ -52,20 +51,23 @@ async function sendUserRawTransaction(rawTx: any, privateKey: any) {
 async function run() {
 	var from = "0x9d16db949dffed9bf500eae1435a68a7cc9ec4df"
 	var to = "0xabe82aa36616c6dea3f8326c3c70bd36194e1717"
+	var ethToSend = '10.01'
+	// get private-key by description
 	var key = getPrivateKey(from)
-	console.log(key)
 	var nonce = await getNonceUser(from)
 	var gas = await getGasPriceUser()
-	var amount = web3.utils.toWei('10.01', 'ether')
+	var amount = web3.utils.toWei(ethToSend, 'ether')
 	console.log(`Nonce=${nonce}    Gas=${gas}    Amount=${amount}`)
 	const rawTx = {
 		to: to,
-		gasLimit: web3.utils.toHex(1000000), // limit of gas
-		value: web3.utils.toHex(amount), // amount in wei
 		nonce: web3.utils.toHex(nonce), // nonce increase by 1
-		gasPrice: web3.utils.toHex(gas), // 1 gas price in wei
+		value: web3.utils.toHex(amount), // amount in wei
+		gasLimit: web3.utils.toHex(1000000), // limit of gas		
+		gasPrice: web3.utils.toHex(10000000000), // 1 gas price in wei
+		//gasPrice: web3.utils.toHex(gas), // 1 gas price in wei
 	};
 	await sendUserRawTransaction(rawTx, new Buffer(key, 'hex'))
+	process.exit(0)
 }
 
 run()
