@@ -33,15 +33,13 @@ async function sendUserRawTransaction(rawTx: any, privateKey: any) {
 	return new Promise(
 		(resolve) => {
 			web3.eth.sendSignedTransaction('0x' + serializedTx.toString('hex'), function (
-				err,
-				hash
-			) {
+				err: any, hash: any) {
 				var info: any = {};
 				info.Error = err;
 				info.Hash = hash;
 				console.log('OK=', info);
-				resolve(info);
-			});
+				resolve(info)
+			})
 		}
 	)
 };
@@ -53,7 +51,7 @@ async function run() {
 	console.log(key)
 	var nonce = await getNonceUser(from)
 	var gas = await getGasPriceUser()
-	var amount = web3.utils.toHex(web3.utils.toWei('0.01', 'ether'))
+	var amount = web3.utils.toHex(web3.utils.toWei('10.01', 'ether'))
 	console.log(`Nonce=${nonce}    Gas=${gas}    Amount=${amount}`)
 	const rawTx = {
 		to: to,
